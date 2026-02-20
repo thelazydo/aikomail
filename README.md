@@ -2,6 +2,18 @@
 
 A robust, high-performance email verification service built with Go. This service provides a comprehensive suite of checks to validate email addresses, ensuring higher deliverability rates and cleaner contact lists.
 
+<div align="center">
+  <h2>Supported By</h2>
+  <a href="https://fly.io">
+    <img src="https://fly.io/static/images/brand/logo-landscape.svg" width="180" alt="Fly.io">
+  </a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://neon.tech">
+    <img src="https://neon.tech/brand/neon-logo-dark-color.svg" width="180" alt="Neon">
+  </a>
+</div>
+NOTE: I used their free services.
+
 ## Features
 
 - **Syntax Validation**: Ensures email addresses conform to standard formats.

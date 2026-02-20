@@ -1,0 +1,154 @@
+basePath: /
+definitions:
+  transport.JobStatusResponse:
+    properties:
+      domain:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      result:
+        type: string
+      status:
+        type: string
+      webhook_url:
+        type: string
+    type: object
+  transport.Response:
+    properties:
+      data: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  transport.VerifyResponseData:
+    properties:
+      job_id:
+        type: string
+    type: object
+  types.JobData:
+    properties:
+      address:
+        type: string
+      webhookURL:
+        type: string
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: An API for verifying email addresses asynchronously.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Email Verifier API
+  version: "1.0"
+paths:
+  /:
+    get:
+      description: Provides information about the available API endpoints.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: API information retrieved successfully.
+          schema:
+            $ref: '#/definitions/transport.Response'
+      summary: API Information
+      tags:
+      - info
+  /status/{id}:
+    get:
+      description: Get the status of a verification job by its ID.
+      parameters:
+      - description: Job ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Job status retrieved successfully.
+          schema:
+            allOf:
+            - $ref: '#/definitions/transport.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/transport.JobStatusResponse'
+              type: object
+        "400":
+          description: Invalid job ID format.
+          schema:
+            allOf:
+            - $ref: '#/definitions/transport.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "404":
+          description: Job not found.
+          schema:
+            allOf:
+            - $ref: '#/definitions/transport.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "500":
+          description: Failed to retrieve job.
+          schema:
+            allOf:
+            - $ref: '#/definitions/transport.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      summary: Get verification status of a job
+      tags:
+      - status
+  /verify:
+    post:
+      consumes:
+      - application/json
+      description: Queues a job to verify an email address.
+      parameters:
+      - description: Email verification payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/types.JobData'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Job accepted for processing.
+          schema:
+            allOf:
+            - $ref: '#/definitions/transport.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/transport.VerifyResponseData'
+              type: object
+        "400":
+          description: Invalid request payload or email address.
+          schema:
+            $ref: '#/definitions/transport.Response'
+        "500":
+          description: Failed to queue job.
+          schema:
+            $ref: '#/definitions/transport.Response'
+      summary: Verify an email address
+      tags:
+      - verification
+swagger: "2.0"

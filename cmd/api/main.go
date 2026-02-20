@@ -11,6 +11,8 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/swaggo/http-swagger"
+	_ "github.com/thelazydo/email-verifier/docs"
 	"github.com/thelazydo/email-verifier/internal/config"
 	"github.com/thelazydo/email-verifier/internal/database"
 	"github.com/thelazydo/email-verifier/internal/middlewares"
@@ -18,6 +20,23 @@ import (
 	"github.com/thelazydo/email-verifier/internal/worker"
 	"github.com/thelazydo/email-verifier/utils"
 )
+
+// @title           Email Verifier API
+// @version         1.0
+// @description     An API for verifying email addresses asynchronously.
+// @termsOfService  http://swagger.io/terms/
+
+// @contact.name   The Lazy DO
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
+
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @BasePath  /
+
+// @externalDocs.description  OpenAPI
+// @externalDocs.url          https://swagger.io/resources/open-api/
 
 func main() {
 	if err := run(); err != nil {
@@ -87,6 +106,7 @@ func routes(cfg *config.Config) http.Handler {
 	mux.Handle("POST /verify", middlewares.LoggingMiddleware(VerifyHandler))
 	mux.Handle("GET /status/{id}", middlewares.LoggingMiddleware(statusHandler))
 	mux.HandleFunc("GET /", transport.HandleBaseRoute)
+	mux.HandleFunc("GET /swagger/", httpSwagger.WrapHandler)
 
 	return mux
 }
